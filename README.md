@@ -1,2 +1,2 @@
 # golang_udemy1
-Studying Golang by Udemy teaching materials.
+Studying Golang by Udemy.
