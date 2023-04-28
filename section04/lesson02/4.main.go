@@ -24,9 +24,9 @@ func main() {
 	// 文字(または特殊文字)のASCIIコード番号を表示(byte型として表示)
 	fmt.Println('\n')
 
-	// string型の中から特定の位置の文字を(ASCIIコード番号のbyte型で)表示
+	// string型の中から特定の位置の文字を(byte型のASCIIコード番号で)表示
 	fmt.Println(s[0])
-	// byte型のASCIIコード番号に対応する文字として表示
-	fmt.Println(string(s[0]))
+	// 更にそれをbyte型のASCIIコード番号に対応する文字として表示
+	fmt.Println(string(s[0])) // 大文字の'A'のASCIIコード65なので'H'は72
 	/* つまり上記から「string型 = byte型の配列」であるとわかる。 */
 }
