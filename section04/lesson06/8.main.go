@@ -20,7 +20,7 @@ func main() {
 	// 浮動小数点型から整数型へのキャストは四捨五入ではなく小数点以下切り捨て
 	fmt.Printf("flの値: %f\ni2の値: %d\n\n", fl, yutori)
 
-	// 文字列型から数値型への変換
+	/* 文字列型から数値型への変換 */
 	var str_num string = "100"
 	fmt.Println(str_num)
 	fmt.Printf("str_numの型: %T\n", str_num)
@@ -38,4 +38,19 @@ func main() {
 	}
 	fmt.Println(int_num2) //エラー発生の場合、int_num2にはint型の初期値0が入る
 
+	/* 数値型から文字列型への変換 */
+	var i2 int = 200
+	s2 := strconv.Itoa(i2)
+	fmt.Println(s2)
+	fmt.Printf("s2の型: %T\n\n", s2)
+
+	/* 文字列(string)とbyte配列の変換 */
+	var h string = "Hoge Hogege"
+	b := []byte(h)
+	fmt.Println(h)
+	fmt.Println(b) // ASCIIコード番号の配列として表示される
+
+	/* byte配列を文字列へ変換 */
+	h2 := string(b)
+	fmt.Println(h2)
 }
