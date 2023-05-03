@@ -10,7 +10,7 @@ import (
 //閉じたチャネルに対してデータ送信はできなくなる(ランタイムエラー)
 //ただしクローズしたチャネルからのデータ受信は可能
 
-func reciever(name string, ch chan int) {
+func reciever2(name string, ch chan int) {
 	for {
 		i, ok := <-ch
 		if !ok {
@@ -47,9 +47,9 @@ func main() {
 		fmt.Println(i, ok)
 	*/
 
-	go reciever("1.goroutine", ch1)
-	go reciever("2.goroutine", ch1)
-	go reciever("3.goroutine", ch1)
+	go reciever2("1.goroutine", ch1)
+	go reciever2("2.goroutine", ch1)
+	go reciever2("3.goroutine", ch1)
 
 	for i := 0; i < 100; i++ {
 		ch1 <- i
