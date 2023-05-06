@@ -74,7 +74,7 @@ func main() {
 	defer f.Close()
 
 	//make関数でbyteのsliceとして文字列の入れ物を作成
-	bs := make([]byte, 128)
+	bs := make([]byte, 32)
 
 	//ファイルを読み込んだ内容をbsに書き込み
 	n, err := f.Read(bs)
@@ -82,9 +82,10 @@ func main() {
 	//改行(\n)もバイト数1の6文字として計算される
 	fmt.Println(n, err)
 	//ファイルを読み込んだ内容を表示
-	fmt.Println(string(bs))
+	fmt.Println(bs)         //byteのsliceとして表示される
+	fmt.Println(string(bs)) //文字列に変換
 
-	bs2 := make([]byte, 128)
+	bs2 := make([]byte, 10)
 
 	//offset位置を10文字目に指定して読み込む
 	nn, _ := f.ReadAt(bs2, 10)
