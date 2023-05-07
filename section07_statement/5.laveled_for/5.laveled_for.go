@@ -34,7 +34,6 @@ Loop:
 			fmt.Println(i, j, i*j)
 		}
 		// ただのcontinueでは一番近いforを抜けるだけで、ここに入ってしまう
-
 		fmt.Println("処理をしたくない部分")
 	}
 }

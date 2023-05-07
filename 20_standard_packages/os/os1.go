@@ -93,4 +93,29 @@ func main() {
 	fmt.Println(nn)
 	fmt.Println(string(bs2))
 
+	//ファイル操作
+	//OpenFile
+	/*フラグ一覧
+	O_RDONLY 読み込み専用
+	O_WRONLY 書き込み専用
+	O_RDWR 読み書き可能
+	O_APPEND ファイル末尾に追記
+	O_CREATE ファイルが存在しなければ作成
+	O_TRUNC 可能であればファイルの内容をオープン時に空にする
+	*/
+
+	//os.Openfile(<対象ファイル>, <フラグ(複数指定可能)>, <パーミッション>)
+	f2, err := os.OpenFile("foo.txt", os.O_RDWR|os.O_CREATE, 0666)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer f2.Close()
+
+	//確保するバイト数は小さ過ぎず大き過ぎない適切範囲が望ましい
+	bs3 := make([]byte, 16)
+	n2, err := f.Read(bs3)
+	fmt.Println(n2) //タブ文字(\t)も改行と同じく1文字で数えられる
+	fmt.Println(bs3)
+	fmt.Println(string(bs3))
+
 }
