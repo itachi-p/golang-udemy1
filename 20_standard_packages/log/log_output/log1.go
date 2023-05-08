@@ -21,7 +21,7 @@ func main() {
 	//log.Panicln("Panic!")
 
 	//任意のファイルを作成し、出力先に指定
-	f, err := os.Create("log/test.log")
+	f, err := os.Create("log/log_output/test.log")
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -48,7 +48,7 @@ func main() {
 
 	// ログのプリフィックスを指定（時刻より前の先頭に表示される）
 	log.SetPrefix("[LOG]")
-	//ファイルの行番号を表示（短縮形）
+	//時刻とファイルの行番号を表示（短縮形）
 	log.SetFlags(log.Ltime | log.Lshortfile)
 	log.Println("プリフィックス表示+時刻+行番号（短縮形）")
 }
