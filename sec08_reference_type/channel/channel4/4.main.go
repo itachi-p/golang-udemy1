@@ -29,7 +29,7 @@ func main() {
 	case v2 := <-ch2:
 		fmt.Println(v2 + "!?")
 	default:
-		fmt.Println("None")
+		fmt.Println("None\n")
 	}
 
 	//selectの活用例

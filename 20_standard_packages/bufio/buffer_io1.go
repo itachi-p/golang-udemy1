@@ -1,9 +1,27 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
 
 //bufio : buffer io
 
 func main() {
-	fmt.Println("vim-go")
+	//標準入力を行単位で読み込む
+
+	//標準入力を入力ソースとしたスキャナの作成
+	scanner := bufio.NewScanner(os.Stdin)
+
+	//入力のスキャンが成功する限り繰り返すループ
+	for scanner.Scan() {
+		//スキャン内容を文字列で出力
+		fmt.Println(scanner.Text())
+	}
+
+	//スキャンにエラーが発生した場合の処理
+	if err := scanner.Err(); err != nil {
+		fmt.Fprintln(os.Stderr, "読み込みエラー:", err)
+	}
 }
