@@ -52,6 +52,8 @@ func main() {
 	fmt.Println(re5.Split("ASHVJV<HabcXYZKNJBJVKABCxyz", -1))
 
 	re5 = regexp.MustCompile(`\s+`)
-	//スペースやタブなどの半角空白で分割する。
-	fmt.Println(re5.Split("aaa     bbbb  cccccc", -1))
+	//半角スペース、タブ、改行などの空白で分割(半角空白1個挟んで表示)する。
+	fmt.Println(re5.Split("aaa     bbbb	cccc　dd", -1))
+	//一見わかりにくいが、全角スペースを挟んだ部分は分割されず一塊になっている。
+	fmt.Println(re5.Split("aaa     bbbb	cccc　dd", -1)[2])
 }
