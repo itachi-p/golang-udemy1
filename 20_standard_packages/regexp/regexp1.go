@@ -12,12 +12,12 @@ func main() {
 	match, _ := regexp.MatchString("BC", "ABCD")
 	fmt.Println(match)
 
-	//Compile
+	//Compile 頻繁に検索条件を変える場合に有用
 	re1, _ := regexp.Compile("AB")
 	match = re1.MatchString("AbC")
 	fmt.Println(match)
 
-	//MustCompile
+	//MustCompile 基本はこれを使う。
 	//2連続エスケープを避ける為、バッククォート(`)の使用推奨
 	//regexp.MustCompile("\\d")
 	re2 := regexp.MustCompile(`\d`) // \d は任意の半角数字[0-9]
@@ -37,8 +37,8 @@ func main() {
 
 	// \s:スペース文字[ \t\n\r\f] +:直前の正規表現が1個以上
 	re4 := regexp.MustCompile(`\s+`)
-	//1個以上の連続した半角スペースを全て,に置き換える
-	fmt.Println(re4.ReplaceAllString("I am    sam  ", ","))
+	//1個以上の連続した半角スペース(やタブ・改行等の空白文字)を全て,に置き換える
+	fmt.Println(re4.ReplaceAllString("I am    sam   ", ","))
 
 	//全角文字も置換可能
 	//置換文字列に空文字を指定することで、正規表現にマッチした部分を文字列から除去
@@ -47,8 +47,8 @@ func main() {
 
 	//正規表現による文字列の分割
 	re5 := regexp.MustCompile((`(abc|ABC)(xyz|XYZ)`))
-	//正規表現で文字列を分割する場合は、regexp.Regexp型のメソッドSplitを使う
-	//第2引数:分割する最大数。-1でマッチした全ての箇所で分割する。[]stringで返す。
+	//正規表現で文字列を分割する場合、regexp.Regexp型のメソッドSplitを使う
+	//第2引数:分割する最大数。-1でマッチした全ての箇所で分割し、[]stringで返す。
 	fmt.Println(re5.Split("ASHVJV<HabcXYZKNJBJVKABCxyz", -1))
 
 	re5 = regexp.MustCompile(`\s+`)
