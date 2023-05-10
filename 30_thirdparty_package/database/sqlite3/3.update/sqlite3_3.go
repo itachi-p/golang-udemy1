@@ -17,11 +17,10 @@ func main() {
 	Db, _ := sql.Open("sqlite3", "./example.sql")
 	defer Db.Close()
 
-	//データの追加
-	//VALUES()の"?"がSQLインジェクション(悪意のあるコマンド)をエスケープしてくれる
-	cmd := "INSERT INTO persons (name, age) VALUES (?, ?)"
+	//データの更新
+	cmd := "UPDATE persons SET age = ? WHERE name = ?"
 	//VALUESの中の"?"を置換して実際にデータを挿入する
-	_, err := Db.Exec(cmd, "世良田次郎三郎元信", 45)
+	_, err := Db.Exec(cmd, 25, "tarou")
 	if err != nil {
 		log.Fatalln(err)
 	}
