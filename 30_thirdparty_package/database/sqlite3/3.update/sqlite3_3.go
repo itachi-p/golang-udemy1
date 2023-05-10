@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"log"
 
-	//コードの中では使用しないが必要なインポート
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -19,7 +18,6 @@ func main() {
 
 	//データの更新
 	cmd := "UPDATE persons SET age = ? WHERE name = ?"
-	//VALUESの中の"?"を置換して実際にデータを挿入する
 	_, err := Db.Exec(cmd, 25, "tarou")
 	if err != nil {
 		log.Fatalln(err)
