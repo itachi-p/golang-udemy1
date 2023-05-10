@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-//sort
+//context
 
 func main() {
 	fmt.Println("vim-go")
