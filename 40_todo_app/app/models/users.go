@@ -55,4 +55,12 @@ func GetUser(id int) (user User, err error) {
 	return user, err
 }
 
-//ユーザー情報の更新
+// ユーザー情報の更新:Userのポインタをレシーバに持つメソッドとして定義
+func (u *User) UpdateUser() (err error) {
+	cmd := `UPDATE users SET name = ?, email = ? WHERE id = ?`
+	_, err = Db.Exec(cmd, u.Name, u.Email, u.ID)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	return err
+}
