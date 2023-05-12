@@ -16,7 +16,7 @@ type User struct {
 	CreatedAt time.Time
 }
 
-// User構造体のポインタをレシーバーとして受け取るメソッドを定義
+// User構造体のポインタをレシーバーとして受け取り、errorを返すメソッド
 func (u *User) CreateUser() (err error) {
 	//idは自動で一意な値としてインクリメントされるので指定しない
 	cmd := `INSERT INTO users (
@@ -38,3 +38,21 @@ func (u *User) CreateUser() (err error) {
 	}
 	return err
 }
+
+// ユーザー情報を1件取得する（メソッドではなく関数として定義）
+func GetUser(id int) (user User, err error) {
+	user = User{}
+	cmd := `SELECT id, uuid, name, email, password, created_at
+	FROM users WHERE id = ?`
+	err = Db.QueryRow(cmd, id).Scan(
+		&user.ID,
+		&user.UUID,
+		&user.Name,
+		&user.Email,
+		&user.PassWord,
+		&user.CreatedAt,
+	)
+	return user, err
+}
+
+//ユーザー情報の更新
