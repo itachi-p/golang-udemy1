@@ -6,7 +6,7 @@ import (
 	"golang_udemy1/40_todo_app/config"
 	"log"
 
-	_ "github.com/mattn/go-sql/sqlite3"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 //テーブル作成
