@@ -33,8 +33,8 @@ func main() {
 	sort.Slice(el, func(i, j int) bool { return el[i].Name < el[j].Name })
 	fmt.Println("----------")
 	fmt.Printf("Name昇順:\n%v\n", el)
-	//続いてValueの昇順でもソートする。
-	//こちらは前のNameの昇順並び替えは破棄される。
+	//連続してValueの昇順でもソート
+	//こちらは前のNameの昇順並び替えの順番は保証されない
 	/* (筈だが、どう変えてもStableと同じになる…仕様変更でもなさげ。謎。)*/
 	sort.Slice(el, func(i, j int) bool { return el[i].Value < el[j].Value })
 	fmt.Printf("Value昇順:\n%v\n", el)

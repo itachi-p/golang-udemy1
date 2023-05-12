@@ -1,1 +1,3 @@
 2023/05/11 21:53:07 main.go:15: test
+2023/05/12 21:28:39 users.go:38: sql: converting argument $1 type: unsupported type func() uuid.UUID, a func
+2023/05/12 21:29:57 users.go:38: sql: converting argument $5 type: unsupported type func() time.Time, a func

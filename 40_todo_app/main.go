@@ -15,5 +15,16 @@ func main() {
 		log.Println("test")
 	*/
 
+	//特に意味はないが、init()関数を呼び出す為に適当に記述
 	fmt.Println(models.Db)
+
+	//テストユーザーをUser構造体のポインタ型として生成
+	u := &models.User{}
+	u.Name = "testuser"
+	u.Email = "test@example.com"
+	u.PassWord = "testtest"
+	fmt.Println(u)
+
+	u.CreateUser()
+
 }
