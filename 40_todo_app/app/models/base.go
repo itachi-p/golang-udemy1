@@ -11,15 +11,18 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-//Userモデル
-//user情報を格納するテーブルの新規作成
+//データ取得元・格納先モデルの生成
 
 var Db *sql.DB
 
 var err error
 
 const (
+	//Userモデル
+	//user情報を格納するテーブルの新規作成
 	tableNameUser = "users"
+	//ToDoモデル
+	tableNameTodo = "todos"
 )
 
 func init() {
@@ -39,6 +42,14 @@ func init() {
 
 	Db.Exec(cmdU)
 
+	//todosテーブル作成SQLコマンド
+	cmdT := fmt.Sprintf(`CREATE TABLE IF NOT EXISTS %s(
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			content TEXT,
+			user_id INTEGER,
+			created_at DATETIME)`, tableNameTodo)
+
+	Db.Exec(cmdT)
 }
 
 // UUIDを生成する関数
