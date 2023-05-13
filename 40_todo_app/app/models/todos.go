@@ -25,3 +25,43 @@ func (u *User) CreateTodo(content string) (err error) {
 	}
 	return err
 }
+
+// Todoデータ1件の取得関数
+func GetTodo(id int) (todo Todo, err error) {
+	cmd := `SELECT id, content, user_id, created_at FROM todos
+	WHERE id = ?`
+	todo = Todo{}
+
+	err = Db.QueryRow(cmd, id).Scan(
+		&todo.ID,
+		&todo.Content,
+		&todo.UserID,
+		&todo.CreatedAt)
+
+	return todo, err
+}
+
+// 全件取得関数
+func GetTodos() (todos []Todo, err error) {
+	cmd := "SELECT id, content, user_id, created_at FROM todos"
+	rows, err := Db.Query(cmd)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	for rows.Next() {
+		var todo Todo
+		//1行づつスキャンしてTodo構造体に格納
+		err = rows.Scan(
+			&todo.ID,
+			&todo.Content,
+			&todo.UserID,
+			&todo.CreatedAt)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		todos = append(todos, todo)
+	}
+	rows.Close()
+
+	return todos, err
+}
