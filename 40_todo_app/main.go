@@ -17,11 +17,12 @@ func main() {
 
 	//特に意味はないが、init()関数を呼び出す為に適当に記述
 	fmt.Println(models.Db)
+
 	/*
 		//テストユーザーをUser構造体のポインタ型として生成
 		u := &models.User{}
-		u.Name = "testuser"
-		u.Email = "test@example.com"
+		u.Name = "テスト三郎"
+		u.Email = "test3@example.com"
 		u.PassWord = "testtest"
 		fmt.Println(u)
 
@@ -44,17 +45,25 @@ func main() {
 	/*
 		user, _ := models.GetUser(3)
 		user.CreateTodo("First Todo")
+			td, _ := models.GetTodo(1)
+			fmt.Println(td)
+		user, _ := models.GetUser(4)
+		user.CreateTodo("5th Todo")
+		   todos, _ := models.GetTodos()
+
+		   	for _, v := range todos {
+		   		fmt.Println(v)
+		   	}
 	*/
 	/*
-		td, _ := models.GetTodo(1)
-		fmt.Println(td)
+		//特定のuserだけの全Todosを列挙
+		user2, _ := models.GetUser(4)
+		todos, _ := user2.GetTodosByUser()
+		for _, v := range todos {
+			fmt.Println(v)
+		}
 	*/
-	user, _ := models.GetUser(3)
-	user.CreateTodo("Second Todo")
-
-	todos, _ := models.GetTodos()
-	for _, v := range todos {
-		fmt.Println(v)
-	}
-
+	td, _ := models.GetTodo(1)
+	td.Content = "Update Todo"
+	td.UpdateTodo()
 }
