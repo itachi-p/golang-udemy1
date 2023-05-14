@@ -10,7 +10,7 @@ func top(w http.ResponseWriter, r *http.Request) {
 	//Cookieを取得し、ログイン状態では表示されないようにする
 	_, err := session(w, r)
 	if err != nil {
-		//様々なハンドラー関数で使うHTMLページ生成の共通関数
+		//様々なハンドラー関数で使うHTMLページ生成の共通関数でトップページを表示
 		generateHTML(w, "Hello, Gopher!", "layout", "public_navbar", "top")
 	} else {
 		//既にログインしている場合はindex.htmlに飛ばす

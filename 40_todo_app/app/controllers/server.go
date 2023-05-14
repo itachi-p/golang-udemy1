@@ -26,11 +26,11 @@ func generateHTML(w http.ResponseWriter, data interface{}, filenames ...string) 
 // Cookie(特定のuser.UUID)を取得・DBと照合し、ログイン状態か否かを判定する
 func session(w http.ResponseWriter, r *http.Request) (sess models.Session, err error) {
 	cookie, err := r.Cookie("_cookie")
-	if err != nil {
+	if err == nil { //エラーが「無ければ」で、エラーハンドリングではない
 		sess = models.Session{UUID: cookie.Value}
 		if ok, _ := sess.CheckSession(); !ok {
 			//もしデータベースのUUIDと一致しなければエラーを生成し強制ログアウト
-			err = fmt.Errorf("Invalid session")
+			err = fmt.Errorf("invalid session")
 		}
 	}
 	//ここでerrが返る場合に処理を分けることでアクセス制限を実現する
@@ -52,8 +52,10 @@ func StartMainServer() error {
 	http.HandleFunc("/login", login)
 
 	http.HandleFunc("/authenticate", authenticate)
-	//ログイン状態のユーザーのみアクセスできないページ
+
+	//ログイン状態のユーザーのみアクセス可能なページ
 	http.HandleFunc("/todos", index)
+	http.HandleFunc("/logout", logout)
 
 	//サーバ起動: 第2引数にnilを渡すことで、デフォルトのマルチプレクサを使用
 	//登録されていないURLへのアクセスはデフォルトで"404 page not found"を返す

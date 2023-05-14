@@ -87,5 +87,19 @@ func authenticate(w http.ResponseWriter, r *http.Request) {
 		//パスワードが一致しない場合はログイン画面に戻す
 		http.Redirect(w, r, "/login", http.StatusFound)
 	}
+}
 
+func logout(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("_cookie")
+	if err != nil {
+		log.Println(err)
+	}
+
+	//Cookieが存在しない以外のエラーだった場合は取得したと同じCookieを削除する
+	if err != http.ErrNoCookie {
+		session := models.Session{UUID: cookie.Value}
+		session.DeleteSessionByUUID()
+	}
+	//セッションのUUIDをデータベースから削除後、ログイン画面にリダイレクトさせる
+	http.Redirect(w, r, "/login", http.StatusFound)
 }
