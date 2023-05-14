@@ -32,6 +32,7 @@ func StartMainServer() error {
 	//ハンドラー(topやsignup)と、それに対応させるURLの登録
 	http.HandleFunc("/", top)
 	http.HandleFunc("/signup", signup)
+	http.HandleFunc("/login", login)
 
 	//サーバ起動: 第2引数にnilを渡すことで、デフォルトのマルチプレクサを使用
 	//登録されていないURLへのアクセスはデフォルトで"404 page not found"を返す
