@@ -18,5 +18,5 @@ func top(w http.ResponseWriter, r *http.Request) {
 	*/
 
 	//今後様々なハンドラー関数で使う共通部分を関数化したものに置き換え
-	generateHTML(w, "Hello, Gopher!", "layout", "top")
+	generateHTML(w, "Hello, Gopher!", "layout", "public_navbar", "top")
 }

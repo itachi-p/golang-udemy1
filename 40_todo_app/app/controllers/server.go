@@ -29,8 +29,10 @@ func StartMainServer() error {
 	/viewsと/css,/jsの間に/staticは無いのでプリフィックスを取り除く*/
 	http.Handle("/static/", http.StripPrefix("/static/", files))
 
-	//ハンドラー(top)と、それに対応させるURLの登録
+	//ハンドラー(topやsignup)と、それに対応させるURLの登録
 	http.HandleFunc("/", top)
+	http.HandleFunc("/signup", signup)
+
 	//サーバ起動: 第2引数にnilを渡すことで、デフォルトのマルチプレクサを使用
 	//登録されていないURLへのアクセスはデフォルトで"404 page not found"を返す
 	return http.ListenAndServe(":"+config.Config.Port, nil)
