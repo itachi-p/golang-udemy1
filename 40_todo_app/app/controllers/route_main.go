@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 )
 
@@ -18,16 +19,26 @@ func top(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// ログイン成功後の画面用ハンドラー
+// ログイン成功後のホーム画面用ハンドラー
 func index(w http.ResponseWriter, r *http.Request) {
-	_, err := session(w, r)
+	sess, err := session(w, r)
 	if err != nil {
 		//エラーがあればログイン状態ではないのでトップページに飛ばす
 		http.Redirect(w, r, "/", http.StatusFound)
-	} else {
-		//セッションが存在すれば、indexページを表示する
+	} else { //セッションが存在すれば、indexページを表示する
+
+		//セッションを使ってユーザー情報を取得
+		user, err := sess.GetUserBySession()
+		if err != nil {
+			log.Println(err)
+		}
+		//このユーザーが作成したToDo一覧を取得
+		todos, _ := user.GetTodosByUser()
+		user.Todos = todos
+
 		//ログイン状態であればtop,signup,login画面とそのリンクは表示しない
-		generateHTML(w, nil, "layout", "private_navbar", "index")
+		//第2引数をnilではなくuserを渡し、画面にユーザーの持つ情報を表示する
+		generateHTML(w, user, "layout", "private_navbar", "index")
 	}
 
 }

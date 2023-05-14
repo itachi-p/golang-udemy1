@@ -13,6 +13,7 @@ type User struct {
 	Email     string
 	PassWord  string
 	CreatedAt time.Time
+	Todos     []Todo //追加でユーザー情報にToDo一覧を持たせる
 }
 
 // セッションテーブル用構造体
@@ -156,4 +157,19 @@ func (sess *Session) DeleteSessionByUUID() (err error) {
 		log.Fatalln(err)
 	}
 	return err
+}
+
+// セッションからユーザー情報を取得するメソッド
+func (sess *Session) GetUserBySession() (user User, err error) {
+	user = User{}
+	cmd := `SELECT id, uuid, name, email, created_at FROM users
+	WHERE id = ?`
+	err = Db.QueryRow(cmd, sess.UserId).Scan(
+		&user.ID,
+		&user.UUID,
+		&user.Name,
+		&user.Email,
+		&user.CreatedAt)
+
+	return user, err
 }
