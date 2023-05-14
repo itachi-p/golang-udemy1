@@ -5,14 +5,22 @@ import (
 	"time"
 )
 
-//usersテーブルにuserを追加
-
+// usersテーブル用構造体
 type User struct {
 	ID        int
 	UUID      string
 	Name      string
 	Email     string
 	PassWord  string
+	CreatedAt time.Time
+}
+
+// セッションテーブル用構造体
+type Session struct {
+	ID        int
+	UUID      string
+	Email     string
+	UserId    int
 	CreatedAt time.Time
 }
 
@@ -73,4 +81,68 @@ func (u *User) DeleteUser() (err error) {
 		log.Fatalln(err)
 	}
 	return err
+}
+
+// ログイン処理用メソッド
+// 入力されたEmailアドレスからユーザー情報を取得する
+func GetUserByEmail(email string) (user User, err error) {
+	user = User{}
+	cmd := `SELECT id, uuid, name, email, password, created_at
+	FROM users WHERE email = ?`
+	err = Db.QueryRow(cmd, email).Scan(
+		&user.ID,
+		&user.UUID,
+		&user.Name,
+		&user.Email,
+		&user.PassWord,
+		&user.CreatedAt)
+
+	return user, err
+}
+
+// セッションを作成/取得するメソッド
+func (u *User) CreateSession() (session Session, err error) {
+	session = Session{}
+	cmd1 := `INSERT INTO sessions (uuid, email, user_id, created_at)
+	VALUES (?, ?, ?, ?)`
+
+	_, err = Db.Exec(cmd1, createUUID(), u.Email, u.ID, time.Now())
+	if err != nil {
+		log.Println(err)
+	}
+
+	cmd2 := `SELECT id, uuid, email, user_id, created_at
+	FROM sessions WHERE user_id = ? AND email = ?`
+
+	err = Db.QueryRow(cmd2, u.ID, u.Email).Scan(
+		&session.ID,
+		&session.UUID,
+		&session.Email,
+		&session.UserId,
+		&session.CreatedAt)
+
+	return session, err
+}
+
+// セッションがデータベースに存在するか(ログイン状態か否か)の確認メソッド
+func (sess *Session) CheckSession() (valid bool, err error) {
+	cmd := `SELECT id, uuid, email, user_id, created_at
+	FROM sessions WHERE uuid = ?`
+
+	err = Db.QueryRow(cmd, sess.UUID).Scan(
+		&sess.ID,
+		&sess.UUID,
+		&sess.Email,
+		&sess.UserId,
+		&sess.CreatedAt)
+	//errが存在する=セッションが存在しない
+	if err != nil {
+		valid = false
+		return
+	}
+	//errでなく、セッションIDが初期値の0ではない=セッションが存在する
+	if sess.ID != 0 {
+		valid = true
+	}
+	return valid, err
 }

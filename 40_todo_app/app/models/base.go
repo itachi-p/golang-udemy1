@@ -23,6 +23,8 @@ const (
 	tableNameUser = "users"
 	//ToDoモデル
 	tableNameTodo = "todos"
+	//ログイン状態保持用のセッションを保存するテーブル
+	tableNameSession = "sessions"
 )
 
 func init() {
@@ -50,6 +52,16 @@ func init() {
 			created_at DATETIME)`, tableNameTodo)
 
 	Db.Exec(cmdT)
+
+	//sessionsテーブル作成コマンド
+	cmdS := fmt.Sprintf(`CREATE TABLE IF NOT EXISTS %s(
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		uuid STRING NOT NULL UNIQUE,
+		email STRING,
+		user_id INTEGER,
+		created_at DATETIME)`, tableNameSession)
+
+	Db.Exec(cmdS)
 }
 
 // UUIDを生成する関数
