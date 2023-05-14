@@ -9,7 +9,14 @@ import (
 /* /signup/でアクセスするページのハンドラー関数 */
 func signup(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		generateHTML(w, nil, "layout", "public_navbar", "signup")
+		//非ログイン状態の時だけアクセスできるようにする
+		_, err := session(w, r)
+		if err != nil {
+			generateHTML(w, nil, "layout", "public_navbar", "signup")
+		} else {
+			//セッションが存在する場合はindex.htmlに飛ばす
+			http.Redirect(w, r, "/todos", http.StatusFound)
+		}
 	} else if r.Method == "POST" {
 		//入力フォームの値が送信された場合の処理を記述(ユーザー登録)
 		err := r.ParseForm() //入力フォームの解析
@@ -36,7 +43,14 @@ func signup(w http.ResponseWriter, r *http.Request) {
 
 // ログイン用ページのハンドラー
 func login(w http.ResponseWriter, r *http.Request) {
-	generateHTML(w, nil, "layout", "public_navbar", "login")
+	//セッションが存在せず、非ログイン状態の場合のみ表示する
+	_, err := session(w, r)
+	if err != nil {
+		generateHTML(w, nil, "layout", "public_navbar", "login")
+	} else {
+		//既にセッションが存在する場合はログイン後のindex.htmlに飛ばす
+		http.Redirect(w, r, "/todos", http.StatusFound)
+	}
 }
 
 func authenticate(w http.ResponseWriter, r *http.Request) {

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"golang_udemy1/40_todo_app/app/models"
 	"golang_udemy1/40_todo_app/config"
 	"html/template"
 	"net/http"
@@ -22,6 +23,20 @@ func generateHTML(w http.ResponseWriter, data interface{}, filenames ...string) 
 	templates.ExecuteTemplate(w, "layout", data)
 }
 
+// Cookie(特定のuser.UUID)を取得・DBと照合し、ログイン状態か否かを判定する
+func session(w http.ResponseWriter, r *http.Request) (sess models.Session, err error) {
+	cookie, err := r.Cookie("_cookie")
+	if err != nil {
+		sess = models.Session{UUID: cookie.Value}
+		if ok, _ := sess.CheckSession(); !ok {
+			//もしデータベースのUUIDと一致しなければエラーを生成し強制ログアウト
+			err = fmt.Errorf("Invalid session")
+		}
+	}
+	//ここでerrが返る場合に処理を分けることでアクセス制限を実現する
+	return sess, err
+}
+
 func StartMainServer() error {
 	//CSSファイルとJavaScriptファイルを静的(static)ファイルとして読み込む
 	files := http.FileServer(http.Dir(config.Config.Static))
@@ -30,10 +45,15 @@ func StartMainServer() error {
 	http.Handle("/static/", http.StripPrefix("/static/", files))
 
 	//ハンドラー(topやsignup)と、それに対応させるURLの登録
+
+	//以下の3つのページは非ログイン状態でのみアクセスできるようにする
 	http.HandleFunc("/", top)
 	http.HandleFunc("/signup", signup)
 	http.HandleFunc("/login", login)
+
 	http.HandleFunc("/authenticate", authenticate)
+	//ログイン状態のユーザーのみアクセスできないページ
+	http.HandleFunc("/todos", index)
 
 	//サーバ起動: 第2引数にnilを渡すことで、デフォルトのマルチプレクサを使用
 	//登録されていないURLへのアクセスはデフォルトで"404 page not found"を返す
