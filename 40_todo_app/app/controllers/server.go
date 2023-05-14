@@ -56,6 +56,8 @@ func StartMainServer() error {
 	//ログイン状態のユーザーのみアクセス可能なページ
 	http.HandleFunc("/todos", index)
 	http.HandleFunc("/logout", logout)
+	http.HandleFunc("/todos/new", todoNew)
+	http.HandleFunc("/todos/save", todoSave)
 
 	//サーバ起動: 第2引数にnilを渡すことで、デフォルトのマルチプレクサを使用
 	//登録されていないURLへのアクセスはデフォルトで"404 page not found"を返す

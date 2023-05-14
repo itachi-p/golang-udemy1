@@ -40,5 +40,38 @@ func index(w http.ResponseWriter, r *http.Request) {
 		//第2引数をnilではなくuserを渡し、画面にユーザーの持つ情報を表示する
 		generateHTML(w, user, "layout", "private_navbar", "index")
 	}
+}
 
+// 新規ToDo作成画面
+func todoNew(w http.ResponseWriter, r *http.Request) {
+	_, err := session(w, r) //sessinの値は使わないのでエラーハンドリングのみ
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusFound)
+	} else {
+		generateHTML(w, nil, "layout", "private_navbar", "todo_new")
+	}
+}
+
+// 新規ToDo保存（画面表示は必ずしも不要）
+func todoSave(w http.ResponseWriter, r *http.Request) {
+	sess, err := session(w, r)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusFound)
+	} else {
+		//POSTメソッドで送信されたフォームの値を取得
+		err = r.ParseForm()
+		if err != nil {
+			log.Println(err)
+		}
+		user, err := sess.GetUserBySession()
+		if err != nil {
+			log.Println(err)
+		}
+		content := r.PostFormValue("content")
+		if err := user.CreateTodo(content); err != nil {
+			log.Println(err)
+		}
+		//ToDoの新規登録が完了したらToDo一覧画面に戻る
+		http.Redirect(w, r, "/todos", http.StatusFound)
+	}
 }
