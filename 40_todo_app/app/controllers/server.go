@@ -33,6 +33,7 @@ func StartMainServer() error {
 	http.HandleFunc("/", top)
 	http.HandleFunc("/signup", signup)
 	http.HandleFunc("/login", login)
+	http.HandleFunc("/authenticate", authenticate)
 
 	//サーバ起動: 第2引数にnilを渡すことで、デフォルトのマルチプレクサを使用
 	//登録されていないURLへのアクセスはデフォルトで"404 page not found"を返す

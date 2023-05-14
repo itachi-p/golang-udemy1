@@ -38,3 +38,40 @@ func signup(w http.ResponseWriter, r *http.Request) {
 func login(w http.ResponseWriter, r *http.Request) {
 	generateHTML(w, nil, "layout", "public_navbar", "login")
 }
+
+func authenticate(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+	}
+	user, err := models.GetUserByEmail(r.PostFormValue("email"))
+	if err != nil {
+		log.Println(err)
+		//エラーの場合はログイン失敗でログイン画面にリダイレクト
+		http.Redirect(w, r, "/login", http.StatusFound)
+	}
+	//ユーザーが存在し、フォームで入力されたパスワードがDBと一致する場合はログイン可
+	//入力されたパスワードを同じ方式で暗号化した上で比較して一致を確認する
+	if user.PassWord == models.Encrypt(r.PostFormValue("password")) {
+		session, err := user.CreateSession()
+		if err != nil {
+			log.Println(err)
+		}
+		//ここで作成されたセッションを元にしてCookieを作成し、ブラウザにログイン情報を保存
+		cookie := http.Cookie{
+			Name:     "_cookie",
+			Value:    session.UUID, //Cookieの値としてUUIDをそのまま渡す
+			HttpOnly: true,
+		}
+		//Cookieをブラウザに保存
+		http.SetCookie(w, &cookie)
+		//ログインに成功
+		/* 本来ならログインに成功したユーザーのみ見れるページに遷移する段階だが
+		今回まだ作成していないのでとりあえずトップページにリダイレクトさせる */
+		http.Redirect(w, r, "/", http.StatusFound)
+	} else {
+		//パスワードが一致しない場合はログイン画面に戻す
+		http.Redirect(w, r, "/login", http.StatusFound)
+	}
+
+}
