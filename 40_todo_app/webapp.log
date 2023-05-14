@@ -1520,3 +1520,4 @@ net/http.(*conn).serve(0xc0000fe3f0, {0x10059a658, 0xc00009b560})
 	/usr/local/go/src/net/http/server.go:1995 +0x612
 created by net/http.(*Server).Serve
 	/usr/local/go/src/net/http/server.go:3089 +0x5ed
+2023/05/14 15:33:31 users.go:37: attempt to write a readonly database
