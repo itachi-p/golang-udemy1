@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"golang_udemy1/40_todo_app/app/models"
 	"log"
 	"net/http"
 )
@@ -38,6 +39,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 		//ログイン状態であればtop,signup,login画面とそのリンクは表示しない
 		//第2引数をnilではなくuserを渡し、画面にユーザーの持つ情報を表示する
+		//テンプレートHTML側では {{.Name}}でmodels.User.Nameにアクセスできる
 		generateHTML(w, user, "layout", "private_navbar", "index")
 	}
 }
@@ -73,5 +75,28 @@ func todoSave(w http.ResponseWriter, r *http.Request) {
 		}
 		//ToDoの新規登録が完了したらToDo一覧画面に戻る
 		http.Redirect(w, r, "/todos", http.StatusFound)
+	}
+}
+
+// ToDoの編集(対象IDを引数として持たせる)
+// server.go内のparseURL関数の、同じ引数を取る内部関数として実行される
+func todoEdit(w http.ResponseWriter, r *http.Request, id int) {
+	sess, err := session(w, r)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusFound)
+	} else {
+		//ユーザーの確認（ただし今回ユーザーは使わないので第1引数は破棄）
+		_, err := sess.GetUserBySession()
+		if err != nil {
+			log.Println(err)
+		}
+		//データベースから引数のIDによりToDoを取得
+		td, err := models.GetTodo(id)
+		if err != nil {
+			//数値型でなければエラーになる
+			log.Println(err)
+		}
+		//受け取った単一のToDoデータを編集画面のテンプレートに渡す
+		generateHTML(w, td, "layout", "private_navbar", "todo_edit")
 	}
 }

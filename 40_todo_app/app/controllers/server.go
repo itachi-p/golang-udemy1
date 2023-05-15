@@ -6,6 +6,8 @@ import (
 	"golang_udemy1/40_todo_app/config"
 	"html/template"
 	"net/http"
+	"regexp"
+	"strconv"
 )
 
 // 様々なハンドラー関数でテンプレートとしてHTML表示される部分を共通化する関数
@@ -37,6 +39,30 @@ func session(w http.ResponseWriter, r *http.Request) (sess models.Session, err e
 	return sess, err
 }
 
+// URLから正規表現により特定のパターンを検出し、格納する変数をコンパイルしておく
+var validPath = regexp.MustCompile("^/todos/(edit|update)/([0-9]+)$")
+
+// URLからID部分を取得し、IDに紐付いた編集ページアクセス用のハンドラー関数を返す関数
+func parseURL(fn func(http.ResponseWriter, *http.Request, int)) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// URLから /todos/edit/id(int値) というパターンをsliceで取得する
+		q := validPath.FindStringSubmatch(r.URL.Path)
+		if q == nil {
+			//正規表現でマッチするURLが見つからずsliceが空になる場合
+			http.NotFound(w, r)
+			return
+		}
+		//URLのsliceのIDの部分は文字列型からINT型に変換しておく
+		qi, err := strconv.Atoi(q[2])
+		if err != nil {
+			http.NotFound(w, r)
+			return
+		}
+		//最終的な処理として、この関数じたいの引数である関数に引数を渡す
+		fn(w, r, qi) //fnは下のhttp.HandleFunc第2引数内のtodoEdit()に等しい
+	}
+}
+
 func StartMainServer() error {
 	//CSSファイルとJavaScriptファイルを静的(static)ファイルとして読み込む
 	files := http.FileServer(http.Dir(config.Config.Static))
@@ -58,6 +84,9 @@ func StartMainServer() error {
 	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/todos/new", todoNew)
 	http.HandleFunc("/todos/save", todoSave)
+	//URLの末尾に"/"が無い場合は完全一致が要求され、付けた場合は後ろに何が付いても通す
+	//parseURL(todoEdit)はハンドラー関数をチェインさせて実行している
+	http.HandleFunc("/todos/edit/", parseURL(todoEdit))
 
 	//サーバ起動: 第2引数にnilを渡すことで、デフォルトのマルチプレクサを使用
 	//登録されていないURLへのアクセスはデフォルトで"404 page not found"を返す
