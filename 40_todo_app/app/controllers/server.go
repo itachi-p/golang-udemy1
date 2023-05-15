@@ -40,7 +40,7 @@ func session(w http.ResponseWriter, r *http.Request) (sess models.Session, err e
 }
 
 // URLから正規表現により特定のパターンを検出し、格納する変数をコンパイルしておく
-var validPath = regexp.MustCompile("^/todos/(edit|update)/([0-9]+)$")
+var validPath = regexp.MustCompile("^/todos/(edit|update|delete)/([0-9]+)$")
 
 // URLからID部分を取得し、IDに紐付いた編集ページアクセス用のハンドラー関数を返す関数
 func parseURL(fn func(http.ResponseWriter, *http.Request, int)) http.HandlerFunc {
@@ -87,7 +87,8 @@ func StartMainServer() error {
 	//URLの末尾に"/"が無い場合は完全一致が要求され、付けた場合は後ろに何が付いても通す
 	//parseURL(todoEdit)はハンドラー関数をチェインさせて実行している
 	http.HandleFunc("/todos/edit/", parseURL(todoEdit))
-
+	http.HandleFunc("/todos/update/", parseURL(todoUpdate))
+	http.HandleFunc("/todos/delete/", parseURL(todoDelete))
 	//サーバ起動: 第2引数にnilを渡すことで、デフォルトのマルチプレクサを使用
 	//登録されていないURLへのアクセスはデフォルトで"404 page not found"を返す
 	return http.ListenAndServe(":"+config.Config.Port, nil)

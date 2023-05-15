@@ -100,3 +100,51 @@ func todoEdit(w http.ResponseWriter, r *http.Request, id int) {
 		generateHTML(w, td, "layout", "private_navbar", "todo_edit")
 	}
 }
+
+// ToDo編集画面からPOSTメソッドで送られたToDoの変更を反映
+func todoUpdate(w http.ResponseWriter, r *http.Request, id int) {
+	sess, err := session(w, r)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusFound)
+	} else {
+		//セッションが存在する場合は、フォームの解析と値の取得を行う
+		err := r.ParseForm()
+		if err != nil {
+			log.Println(err)
+		}
+		user, err := sess.GetUserBySession()
+		if err != nil {
+			log.Println(err)
+		}
+		content := r.PostFormValue("content")
+		td := &models.Todo{ID: id, Content: content, UserID: user.ID}
+		if err := td.UpdateTodo(); err != nil {
+			log.Println(err)
+		}
+		//ToDoの更新が終わったらToDo一覧画面(index.html)に戻す
+		http.Redirect(w, r, "/todos", http.StatusFound)
+	}
+}
+
+// ToDoの削除（特定の1件）
+func todoDelete(w http.ResponseWriter, r *http.Request, id int) {
+	sess, err := session(w, r)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusFound)
+	} else {
+		//セッションが存在すれば、念の為ユーザーの存在の有無だけ確認
+		_, err := sess.GetUserBySession()
+		if err != nil {
+			log.Println(err)
+		}
+		td, err := models.GetTodo(id)
+		if err != nil {
+			log.Println(err)
+		}
+		if err := td.DeleteTodo(); err != nil {
+			log.Println(err)
+		}
+		//対象ToDoの削除が完了したらリダイレクト
+		http.Redirect(w, r, "/todos", http.StatusFound)
+	}
+}
