@@ -6,6 +6,7 @@ import (
 	"golang_udemy1/40_todo_app/config"
 	"html/template"
 	"net/http"
+	"os"
 	"regexp"
 	"strconv"
 )
@@ -91,5 +92,8 @@ func StartMainServer() error {
 	http.HandleFunc("/todos/delete/", parseURL(todoDelete))
 	//サーバ起動: 第2引数にnilを渡すことで、デフォルトのマルチプレクサを使用
 	//登録されていないURLへのアクセスはデフォルトで"404 page not found"を返す
-	return http.ListenAndServe(":"+config.Config.Port, nil)
+
+	//Postgres用にポートを取得
+	port := os.Getenv("PORT")
+	return http.ListenAndServe(":"+port, nil)
 }

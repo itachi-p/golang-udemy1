@@ -14,6 +14,7 @@ type User struct {
 	PassWord  string
 	CreatedAt time.Time
 	Todos     []Todo //追加でユーザー情報にToDo一覧を持たせる
+
 }
 
 // セッションテーブル用構造体
@@ -33,7 +34,7 @@ func (u *User) CreateUser() (err error) {
 		name,
 		email,
 		password,
-		created_at) VALUES (?, ?, ?, ?, ?)`
+		created_at) VALUES ($1, $2, $3, $4, $5)`
 
 	_, err = Db.Exec(cmd,
 		createUUID(),
@@ -52,7 +53,7 @@ func (u *User) CreateUser() (err error) {
 func GetUser(id int) (user User, err error) {
 	user = User{}
 	cmd := `SELECT id, uuid, name, email, password, created_at
-	FROM users WHERE id = ?`
+	FROM users WHERE id = $1`
 	err = Db.QueryRow(cmd, id).Scan(
 		&user.ID,
 		&user.UUID,
@@ -66,7 +67,7 @@ func GetUser(id int) (user User, err error) {
 
 // ユーザー情報の更新:Userのポインタをレシーバに持つメソッドとして定義
 func (u *User) UpdateUser() (err error) {
-	cmd := `UPDATE users SET name = ?, email = ? WHERE id = ?`
+	cmd := `UPDATE users SET name = $1, email = $2 WHERE id = $3`
 	_, err = Db.Exec(cmd, u.Name, u.Email, u.ID)
 	if err != nil {
 		log.Fatalln(err)
@@ -76,7 +77,7 @@ func (u *User) UpdateUser() (err error) {
 
 // ユーザーの削除メソッド
 func (u *User) DeleteUser() (err error) {
-	cmd := `DELETE FROM users WHERE id = ?`
+	cmd := `DELETE FROM users WHERE id = $1`
 	_, err = Db.Exec(cmd, u.ID)
 	if err != nil {
 		log.Fatalln(err)
@@ -89,7 +90,7 @@ func (u *User) DeleteUser() (err error) {
 func GetUserByEmail(email string) (user User, err error) {
 	user = User{}
 	cmd := `SELECT id, uuid, name, email, password, created_at
-	FROM users WHERE email = ?`
+	FROM users WHERE email = $1`
 	err = Db.QueryRow(cmd, email).Scan(
 		&user.ID,
 		&user.UUID,
@@ -104,8 +105,12 @@ func GetUserByEmail(email string) (user User, err error) {
 // セッションを作成/取得するメソッド
 func (u *User) CreateSession() (session Session, err error) {
 	session = Session{}
-	cmd1 := `INSERT INTO sessions (uuid, email, user_id, created_at)
-	VALUES (?, ?, ?, ?)`
+	cmd1 := `INSERT INTO sessions (
+		uuid, 
+		email, 
+		user_id, 
+		created_at)
+	VALUES ($1, $2, $3, $4)`
 
 	_, err = Db.Exec(cmd1, createUUID(), u.Email, u.ID, time.Now())
 	if err != nil {
@@ -113,7 +118,7 @@ func (u *User) CreateSession() (session Session, err error) {
 	}
 
 	cmd2 := `SELECT id, uuid, email, user_id, created_at
-	FROM sessions WHERE user_id = ? AND email = ?`
+	FROM sessions WHERE user_id = $1 AND email = $2`
 
 	err = Db.QueryRow(cmd2, u.ID, u.Email).Scan(
 		&session.ID,
@@ -128,7 +133,7 @@ func (u *User) CreateSession() (session Session, err error) {
 // セッションがデータベースに存在するか(ログイン状態か否か)の確認メソッド
 func (sess *Session) CheckSession() (valid bool, err error) {
 	cmd := `SELECT id, uuid, email, user_id, created_at
-	FROM sessions WHERE uuid = ?`
+	FROM sessions WHERE uuid = $1`
 
 	err = Db.QueryRow(cmd, sess.UUID).Scan(
 		&sess.ID,
@@ -151,7 +156,7 @@ func (sess *Session) CheckSession() (valid bool, err error) {
 // ログアウト処理
 // セッションから取得したCookieと一致したUUIDをテーブルから削除する
 func (sess *Session) DeleteSessionByUUID() (err error) {
-	cmd := `DELETE FROM sessions WHERE uuid = ?`
+	cmd := `DELETE FROM sessions WHERE uuid = $1`
 	_, err = Db.Exec(cmd, sess.UUID)
 	if err != nil {
 		log.Fatalln(err)
@@ -163,7 +168,7 @@ func (sess *Session) DeleteSessionByUUID() (err error) {
 func (sess *Session) GetUserBySession() (user User, err error) {
 	user = User{}
 	cmd := `SELECT id, uuid, name, email, created_at FROM users
-	WHERE id = ?`
+	WHERE id = $1`
 	err = Db.QueryRow(cmd, sess.UserId).Scan(
 		&user.ID,
 		&user.UUID,

@@ -17,7 +17,7 @@ func (u *User) CreateTodo(content string) (err error) {
 	cmd := `INSERT INTO todos (
 		content,
 		user_id,
-		created_at) VALUES (?, ?, ?)`
+		created_at) VALUES ($1, $2, $3)`
 
 	_, err = Db.Exec(cmd, content, u.ID, time.Now())
 	if err != nil {
@@ -29,7 +29,7 @@ func (u *User) CreateTodo(content string) (err error) {
 // Todoデータ1件の取得関数
 func GetTodo(id int) (todo Todo, err error) {
 	cmd := `SELECT id, content, user_id, created_at FROM todos
-	WHERE id = ?`
+	WHERE id = $1`
 	todo = Todo{}
 
 	err = Db.QueryRow(cmd, id).Scan(
@@ -69,7 +69,7 @@ func GetTodos() (todos []Todo, err error) {
 // 特定のユーザーに紐付いた全Todoの取得メソッド
 func (u *User) GetTodosByUser() (todos []Todo, err error) {
 	cmd := `SELECT id, content, user_id, created_at FROM todos
-	WHERE user_id = ?`
+	WHERE user_id = $1`
 
 	rows, err := Db.Query(cmd, u.ID)
 	if err != nil {
@@ -95,8 +95,8 @@ func (u *User) GetTodosByUser() (todos []Todo, err error) {
 
 // 更新: Todo構造体のポインタをレシーバに持つメソッドとして定義
 func (t *Todo) UpdateTodo() error {
-	cmd := `UPDATE todos SET content = ?, user_id = ?
-	WHERE id = ?`
+	cmd := `UPDATE todos SET content = $1, user_id = $2
+	WHERE id = $1`
 	_, err = Db.Exec(cmd, t.Content, t.UserID, t.ID)
 	if err != nil {
 		log.Fatalln(err)
@@ -106,7 +106,7 @@ func (t *Todo) UpdateTodo() error {
 
 // 削除
 func (t *Todo) DeleteTodo() error {
-	cmd := "DELETE FROM todos WHERE id = ?"
+	cmd := "DELETE FROM todos WHERE id = $1"
 	_, err = Db.Exec(cmd, t.ID)
 	if err != nil {
 		log.Fatalln(err)
