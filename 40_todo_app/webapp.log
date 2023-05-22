@@ -1525,3 +1525,4 @@ created by net/http.(*Server).Serve
 2023/05/15 00:16:44 server.go:3217: http: superfluous response.WriteHeader call from golang_udemy1/40_todo_app/app/controllers.authenticate (route_auth.go:88)
 2023/05/15 00:19:06 route_auth.go:63: sql: no rows in result set
 2023/05/15 00:19:06 server.go:3217: http: superfluous response.WriteHeader call from golang_udemy1/40_todo_app/app/controllers.authenticate (route_auth.go:88)
+2023/05/23 01:35:48 todos.go:24: attempt to write a readonly database
