@@ -9,10 +9,12 @@ import (
 //型パラメータに制約を持たせることもできる
 
 // any型は任意の型をなんでも受け取れるが、他にも様々なinterfaceが指定可能
-// fmt.Stringer(): string型を返すString()という関数を実装すればよい
+// fmt.Stringer(): string型を返すString()というメソッドを実装すればよい
 func f[T fmt.Stringer](xs []T) []string {
 	result := []string{}
 	for _, x := range xs {
+		//未定義のT型のスライスxsの要素である変数xは必ずString()を持つ
+		//そのString()メソッドの中身の実装は後でよい（これこそが利点）
 		result = append(result, x.String())
 	}
 	return result
