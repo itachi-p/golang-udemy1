@@ -9,5 +9,6 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.16 // indirect
 	github.com/nedpals/postgrest-go v0.1.2 // indirect
 	github.com/nedpals/supabase-go v0.2.0 // indirect
+	golang.org/x/tour v0.1.0 // indirect
 	gopkg.in/go-ini/ini.v1 v1.67.0 // indirect
 )

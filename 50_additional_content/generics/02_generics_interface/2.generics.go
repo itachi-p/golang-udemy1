@@ -6,7 +6,7 @@ import (
 )
 
 //Generics
-//型パラメータに制約を持たせることもできる
+//interface型パラメータに制約を持たせる
 
 // any型は任意の型をなんでも受け取れるが、他にも様々なinterfaceが指定可能
 // fmt.Stringer(): string型を返すString()というメソッドを実装すればよい

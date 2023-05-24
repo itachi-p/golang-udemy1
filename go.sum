@@ -11,6 +11,8 @@ github.com/nedpals/postgrest-go v0.1.2 h1:OaT4u6ZAfFSDIj1jrLZEjqY3fgLrZw9j7Lgc1z
 github.com/nedpals/postgrest-go v0.1.2/go.mod h1:RGinB2OXsnGLcZMu5avS0U+b9npyZmk+ecK74UDi/xY=
 github.com/nedpals/supabase-go v0.2.0 h1:ZuciOzOwfyKmsd/D/XAP4+pTx/2kpAhLbo8OS3WZQo8=
 github.com/nedpals/supabase-go v0.2.0/go.mod h1:RSjFlnvLQ3nc9F4WhyartDlvT6smRY0tnJTLxum31d8=
+golang.org/x/tour v0.1.0 h1:OWzbINRoGf1wwBhKdFDpYwM88NM0d1SL/Nj6PagS6YE=
+golang.org/x/tour v0.1.0/go.mod h1:DUZC6G8mR1AXgXy73r8qt/G5RsefKIlSj6jBMc8b9Wc=
 golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 gopkg.in/go-ini/ini.v1 v1.67.0 h1:XD5KHKqXxJbG21C8Hn12RufD9nDt9NgJVmf4xFtqOxQ=
 gopkg.in/go-ini/ini.v1 v1.67.0/go.mod h1:M74/hG4RTwbkZyTEZ9iQwM4v6dFD4u6QBjoqT/pM8Kg=
