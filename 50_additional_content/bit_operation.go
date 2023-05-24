@@ -12,9 +12,7 @@ const (
 )
 
 func needInt(x int) int { return x }
-func needFloat(x float64) float64 {
-	return x
-}
+func needFloat(x float64) float64 { return x }
 
 func main() {
 	fmt.Printf("Type:%T, Value:%d\n", needInt(Small), needInt(Small))
@@ -26,5 +24,5 @@ func main() {
 	fmt.Println(needInt(Big-1) + 1) //結果的に=Bigに等しいが、エラーにならない
 	fmt.Printf("Type:%T, Value:%f\n", needFloat(Small), needFloat(Small))
 	fmt.Printf("Type:%T, Value:%g\n", 8.0, 8.0) //書式指定子%vや%gだと整数の場合intと同様の表示
-	fmt.Println(needFloat(Big))                 //浮動小数点表記法で正の整数も1の位以下×桁数で表される
+	fmt.Println(needFloat(Big)) //浮動小数点表記法で正の整数も1の位以下×桁数で表される
 }
