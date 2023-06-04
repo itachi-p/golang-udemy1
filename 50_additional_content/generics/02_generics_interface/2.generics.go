@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-//Generics
+//Generics(Golang1.18〜)
 //interface型パラメータに制約を持たせる
 
 // any型は任意の型をなんでも受け取れるが、他にも様々なinterfaceが指定可能
