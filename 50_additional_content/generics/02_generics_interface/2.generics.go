@@ -20,6 +20,13 @@ func f[T fmt.Stringer](xs []T) []string {
 	return result
 }
 
+/* 独自のインターフェースを追記してみる
+//この部分はあってもなくても同様に動作する
+type Stringer interface {
+	String() string
+}
+*/
+
 // 独自の型を定義(int型のAlias)
 type MyInt int
 
