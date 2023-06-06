@@ -20,12 +20,17 @@ func f[T fmt.Stringer](xs []T) []string {
 	return result
 }
 
+// 独自の型を定義(int型のAlias)
 type MyInt int
 
+// MyInt型に対してString()メソッドを実装する
 func (i MyInt) String() string {
+	//中身はなんでもいいが、とりあえずMyInt型の値を文字列に変換する
 	return strconv.Itoa(int(i))
 }
 
 func main() {
+	//実行結果はパッと見は区別付かないが、String型のSliceになっている
 	fmt.Println(f([]MyInt{1, 2, 3, 4}))
+	fmt.Printf("%T", f([]MyInt{1, 2, 3, 4}))
 }
