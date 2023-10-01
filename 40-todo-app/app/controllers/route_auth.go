@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"golang_udemy1/40_todo_app/app/models"
+	"golang-udemy1/40-todo-app/app/models"
 	"log"
 	"net/http"
 )

@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"golang_udemy1/40_todo_app/app/controllers"
-	"golang_udemy1/40_todo_app/app/models"
+
+	"/Users/itachi-p/go/src/golang-udemy1/40-todo-app/app/controllers"
+	"/Users/itachi-p/go/src/golang-udemy1/40-todo-app/app/models"
 )
 
 func main() {

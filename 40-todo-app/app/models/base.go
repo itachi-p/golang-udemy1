@@ -4,7 +4,7 @@ import (
 	"crypto/sha1"
 	"database/sql"
 	"fmt"
-	"golang_udemy1/40_todo_app/config"
+	"golang-udemy1/40-todo-app/config"
 	"log"
 	"os"
 

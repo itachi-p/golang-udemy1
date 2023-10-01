@@ -1,7 +1,7 @@
 package config
 
 import (
-	"golang_udemy1/40_todo_app/utils"
+	"golang-udemy1/40-todo-app/utils"
 	"log"
 
 	"gopkg.in/go-ini/ini.v1"

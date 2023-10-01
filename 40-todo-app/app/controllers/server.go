@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"fmt"
-	"golang_udemy1/40_todo_app/app/models"
-	"golang_udemy1/40_todo_app/config"
+	"golang-udemy1/40-todo-app/app/models"
+	"golang-udemy1/40-todo-app/config"
 	"html/template"
 	"net/http"
 	"os"
